@@ -1,0 +1,283 @@
+{
+  "name": "Automated Email & Data Update System",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Fo08gUgUaazJknBQnPFzJBcZFNxTvfff9UuU9p8nHKY",
+          "mode": "list",
+          "cachedResultName": "Project Autoemail Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Fo08gUgUaazJknBQnPFzJBcZFNxTvfff9UuU9p8nHKY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Fo08gUgUaazJknBQnPFzJBcZFNxTvfff9UuU9p8nHKY/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -208,
+        -176
+      ],
+      "id": "f62d55dc-3047-4d06-9d56-ca8bd574668b",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WFJgCBPruYOkC7j6",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        32,
+        -176
+      ],
+      "id": "cad601a6-77e9-4ba8-a380-909dcc8efede",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -176
+      ],
+      "id": "aa720e28-7bcb-4a74-8e7d-f488a5d2c507",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Thanks for purchasing",
+        "message": "=Hi  {{ $json.CustomerName }} \n\nyour order have been received. \n\nOrder Details are given below.\nInvocie ID {{ $json.InvoiceID }}\nTotal Price {{ $json.Total }}\n\nRegards,\nABC Store. ",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        -336
+      ],
+      "id": "f43b655e-bbd9-4ca4-af46-1fea1ae86862",
+      "name": "Send a message",
+      "webhookId": "5ee43560-ecb9-43d9-976a-1a5502b691b5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "c13ZRjQljuRRRRNY",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Fo08gUgUaazJknBQnPFzJBcZFNxTvfff9UuU9p8nHKY",
+          "mode": "list",
+          "cachedResultName": "Project Autoemail Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Fo08gUgUaazJknBQnPFzJBcZFNxTvfff9UuU9p8nHKY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Fo08gUgUaazJknBQnPFzJBcZFNxTvfff9UuU9p8nHKY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Sent",
+            "InvoiceID": "={{ $('Get row(s) in sheet').item.json.InvoiceID }}"
+          },
+          "matchingColumns": [
+            "InvoiceID"
+          ],
+          "schema": [
+            {
+              "id": "InvoiceID",
+              "displayName": "InvoiceID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CustomerName",
+              "displayName": "CustomerName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "UnitPrice",
+              "displayName": "UnitPrice",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        -48
+      ],
+      "id": "1f5c97b2-9d9f-4ad0-94bf-0ed469b8652d",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WFJgCBPruYOkC7j6",
+          "name": "Unnamed credential"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "15f4c525-a067-4591-ad7f-23827777a7ef",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7c2d36da011cea2f2c21753cd205669a2de9e01da154d274f2b35aceaa1ba6ae"
+  },
+  "id": "7kGfDFdqIxGvqJVQ",
+  "tags": []
+}
